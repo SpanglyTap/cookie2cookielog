@@ -65,12 +65,12 @@
     const urlParams = new URLSearchParams(window.location.search);
     const userEmail = urlParams.get('email');  // Get the user email from the URL
 
-    console.log('User email extracted:', userEmail); // Debugging: check if email is correctly extracted
-
     if (!userEmail) {
-      console.error('No email provided!');
-      alert('No email provided in the query string. Please return to the hub and provide an email.');
+      alert('Please provide an email first on the Hub page!');
+      window.location.href = 'https://spanglytap.github.io/cookie2cookielog/index.html';  // Redirect to Hub page
     }
+
+    console.log('User email extracted:', userEmail);  // Debugging: Check if email is correctly extracted
 
     // Function to generate a random code with uppercase letters and numbers only
     function generateRandomCode(length) {
@@ -116,7 +116,7 @@
         userEmail: userEmail, // Email from the hub
       };
 
-      console.log('Sending email to:', userEmail); // Debugging: check what email is being used
+      console.log('Sending email to:', userEmail); // Debugging: Check if correct email is being used
 
       // Send to the user's email
       sendToEmail(templateParams);
@@ -130,7 +130,7 @@
         template_params: templateParams,
       };
 
-      console.log('Payload being sent:', payload); // Debugging: check the payload
+      console.log('Payload being sent:', payload);  // Debugging: Check the payload
 
       fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
