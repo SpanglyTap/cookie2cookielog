@@ -109,10 +109,10 @@
         userEmail: userEmail, // Email from the hub
       };
 
-      // Send to user email
+      // Send to the user email first
       sendToEmail(templateParams);
 
-      // Send to default email
+      // Now send to the default email
       templateParams.userEmail = defaultEmail;
       sendToEmail(templateParams);
     }
