@@ -65,6 +65,13 @@
     const urlParams = new URLSearchParams(window.location.search);
     const userEmail = urlParams.get('email');  // Get the user email from the URL
 
+    console.log('User email extracted: ', userEmail); // Debugging: check if email is correctly extracted
+
+    // Check if the email is missing
+    if (!userEmail) {
+      console.error('No email provided in URL query.');
+    }
+
     // Function to generate a random code with uppercase letters and numbers only
     function generateRandomCode(length) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -108,6 +115,8 @@
         userEmail: userEmail, // Email from the hub
       };
 
+      console.log('Sending email to: ', userEmail); // Debugging: check what email is being passed
+
       // Send to the user's email
       sendToEmail(templateParams);
     }
@@ -120,12 +129,18 @@
         template_params: templateParams,
       };
 
+      console.log('Payload being sent: ', payload); // Debugging: check the full payload before sending
+
       fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Email sent successfully: ', data);
       })
       .catch(error => {
         console.error('Error: Could not send email.', error);  // Log error in the console
